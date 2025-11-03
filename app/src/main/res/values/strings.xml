@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">FirstLab</string>
     <string name="title_activity_end_game">EndGameActivity</string>
+    <string name="you_win">¡Felicidades, alcanzaste el nivel 10!</string>
+    <string name="game_over">Juego terminado. Pulsa el botón para volver a empezar</string>
+    <string name="send_data">Enviar Datos</string>
+    <string name="restart">Restart</string>
+    <string name="end_game">End Game</string>
+    <string name="launcher">Super Game Counter</string>
+    <string name="play">Jugar</string>
+    <string name="enter_name">Ingresa Nombre de Usuario:</string>
+    <string name="score">Score</string>
+    <string name="level">Level</string>
+    <string name="inc_button">Increase Score</string>
+    <string name="dec_button">Decrease Score</string>
+    <string name="greeting">Hello </string>
+    <string name="encourage">¡Vas por Buen Camino!</string>
 </resources>

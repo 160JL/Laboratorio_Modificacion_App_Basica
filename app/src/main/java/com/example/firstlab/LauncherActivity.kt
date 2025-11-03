@@ -5,21 +5,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import com.example.firstlab.MainActivity.Companion.LEVEL_KEY
-import com.example.firstlab.MainActivity.Companion.SCORE_KEY
+import androidx.compose.ui.res.stringResource
 import com.example.firstlab.MainActivity.Companion.USER_KEY
 import com.example.firstlab.ui.theme.FirstLabTheme
 
@@ -48,25 +40,21 @@ class LauncherActivity : ComponentActivity() {
 
         enableEdgeToEdge()
 
-        // Recuperar los valores enviados a través del Intent
-        
-
-        // Establecer el contenido usando Jetpack Compose
         setContent {
             FirstLabTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = { CenterAlignedTopAppBar(title = { Text(text = "End Game") }) }
+                    topBar = { CenterAlignedTopAppBar(title = { Text(text = stringResource(R.string.launcher)) }) }
                 ) { innerPadding ->
                     // Mostrar los valores recibidos en una columna
-                    extracted(innerPadding)
+                    TextField(innerPadding)
                 }
             }
         }
     }
 
     @Composable
-    private fun extracted(innerPadding: PaddingValues) {
+    private fun TextField(innerPadding: PaddingValues) {
         var username by remember { mutableStateOf("") }
         Column(
             modifier = Modifier
@@ -75,14 +63,15 @@ class LauncherActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Enter Your name:")
+            Text(stringResource(R.string.enter_name))
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
             )
-            StandardButton("Play") {
+            StandardButton(stringResource(R.string.play)) {
                 // Acción al hacer clic: abrir EndGameActivity
-                goToMainActivity(username)
+                if (!username.isBlank()){goToMainActivity(username)}
+
             }
         }
     }
