@@ -35,6 +35,7 @@ import com.example.firstlab.MainActivity.Companion.USER_KEY
 import com.example.firstlab.ui.theme.FirstLabTheme
 
 class LauncherActivity : ComponentActivity() {
+
     private val goToMainActivity : (username : String) -> Unit =  {username ->
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra(USER_KEY, username)
@@ -48,8 +49,6 @@ class LauncherActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         // Recuperar los valores enviados a través del Intent
-        val score = intent.getIntExtra(SCORE_KEY, 0)
-        val level = intent.getIntExtra(LEVEL_KEY, 0)
         
 
         // Establecer el contenido usando Jetpack Compose

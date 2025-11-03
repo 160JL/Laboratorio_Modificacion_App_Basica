@@ -23,13 +23,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.firstlab.MainActivity.Companion.LEVEL_KEY
 import com.example.firstlab.MainActivity.Companion.SCORE_KEY
+import com.example.firstlab.MainActivity.Companion.USER_KEY
 import com.example.firstlab.ui.theme.FirstLabTheme
 
 class EndGameActivity : ComponentActivity() {
+
+    private val name : String = ""
     private val goToMainActivity : () -> Unit =  {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra(SCORE_KEY, 0)
         intent.putExtra(LEVEL_KEY, 0)
+        intent.putExtra(USER_KEY, name)
         startActivity(intent)
     }
     @OptIn(ExperimentalMaterial3Api::class)
@@ -41,6 +45,7 @@ class EndGameActivity : ComponentActivity() {
         // Recuperar los valores enviados a través del Intent
         val score = intent.getIntExtra(MainActivity.SCORE_KEY, 0)
         val level = intent.getIntExtra(MainActivity.LEVEL_KEY, 0)
+        val name = intent.getStringExtra(MainActivity.USER_KEY)
 
         // Establecer el contenido usando Jetpack Compose
         setContent {

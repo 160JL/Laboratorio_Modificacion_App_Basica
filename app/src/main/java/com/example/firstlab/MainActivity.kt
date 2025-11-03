@@ -39,6 +39,8 @@ import com.example.firstlab.ui.theme.FirstLabTheme
 
 class MainActivity : ComponentActivity() {
 
+
+
     companion object {
         const val TAG = "MainActivity"
         const val SCORE_KEY = "score"
@@ -51,7 +53,6 @@ class MainActivity : ComponentActivity() {
     private var score: Int = 0
     private var level: Int = 0
 
-    private var victory: Boolean = false
 
 
     private val incrementScoreAndLevel: (Int) -> Map<String, Int> = { inc ->
@@ -72,17 +73,19 @@ class MainActivity : ComponentActivity() {
         val intent = Intent(this, EndGameActivity::class.java)
         intent.putExtra(SCORE_KEY, score)
         intent.putExtra(LEVEL_KEY, level)
+        intent.putExtra(USER_KEY, name)
         startActivity(intent)
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        name = intent.getStringExtra(USER_KEY).toString()
 
         savedInstanceState?.let { instance ->
             score = instance.getInt(SCORE_KEY, 0)
             level = instance.getInt(LEVEL_KEY, 0)
-            name = instance.getString(USER_KEY, "")
+            name = instance.getString(USER_KEY,"user")
         }
 
         enableEdgeToEdge()
