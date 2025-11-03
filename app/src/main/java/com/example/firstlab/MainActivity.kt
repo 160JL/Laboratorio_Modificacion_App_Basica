@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.firstlab.ui.theme.FirstLabTheme
 
+
 class MainActivity : ComponentActivity() {
 
     companion object {
@@ -43,19 +44,28 @@ class MainActivity : ComponentActivity() {
         const val LEVEL_KEY = "level"
     }
 
-    private val name : String= "Santos"
-    private var score : Int = 0
-    private var level : Int = 0
+    private val name: String = "Santos"
+    private var score: Int = 0
+    private var level: Int = 0
+
+    private var victory: Boolean = false
 
 
-    private val incrementScoreAndLevel : (Int) -> Map<String,Int> = { inc ->
+    private val incrementScoreAndLevel: (Int) -> Map<String, Int> = { inc ->
         score += inc
         level = score / 10
         //mapOf(Pair("score", score), Pair("level", level))
         mapOf(SCORE_KEY to score, LEVEL_KEY to level)
     }
 
-    private val goToEndGameActivity : () -> Unit =  {
+    private val decreaseScoreAndLevel: (Int) -> Map<String, Int> = { inc ->
+        score -= inc
+        level = score / 10
+        //mapOf(Pair("score", score), Pair("level", level))
+        mapOf(SCORE_KEY to score, LEVEL_KEY to level)
+    }
+
+    private val goToEndGameActivity: () -> Unit = {
         val intent = Intent(this, EndGameActivity::class.java)
         intent.putExtra(SCORE_KEY, score)
         intent.putExtra(LEVEL_KEY, level)
@@ -67,8 +77,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         savedInstanceState?.let { instance ->
-            score = instance.getInt(SCORE_KEY,0)
-            level = instance.getInt(LEVEL_KEY,0)
+            score = instance.getInt(SCORE_KEY, 0)
+            level = instance.getInt(LEVEL_KEY, 0)
         }
 
         enableEdgeToEdge()
@@ -76,9 +86,17 @@ class MainActivity : ComponentActivity() {
             FirstLabTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = { CenterAlignedTopAppBar( title = { Text(text = "Super Game Counter") } ) }
+                    topBar = { CenterAlignedTopAppBar(title = { Text(text = "Super Game Counter") }) }
                 ) { innerPadding ->
-                    GameStateDisplay(name, score, level, Modifier.padding(innerPadding), incrementScoreAndLevel, goToEndGameActivity)
+                    GameStateDisplay(
+                        name,
+                        score,
+                        level,
+                        Modifier.padding(innerPadding),
+                        incrementScoreAndLevel,
+                        decreaseScoreAndLevel,
+                        goToEndGameActivity
+                    )
                 }
             }
         }
@@ -135,8 +153,9 @@ fun GameStateDisplay(
     initScore: Int,
     initLevel: Int,
     modifier: Modifier = Modifier,
-    onIncButtonClick : (Int) -> Map<String,Int>,
-    onEndGameButtonClick : () -> Unit
+    onIncButtonClick: (Int) -> Map<String, Int>,
+    onDecButtonClick: (Int) -> Map<String, Int>,
+    onEndGameButtonClick: () -> Unit
 ) {
     var score by remember { mutableIntStateOf(initScore) }
     var level by remember { mutableIntStateOf(initLevel) }
@@ -158,7 +177,7 @@ fun GameStateDisplay(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(intrinsicSize = IntrinsicSize.Min )
+                .height(intrinsicSize = IntrinsicSize.Min)
                 .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -166,7 +185,14 @@ fun GameStateDisplay(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .background(Color.Red)
+                    .background(
+                        when (level) {
+                            in 0..2 -> Color.Red
+                            in 3..6 -> Color(0xFFFF6A00)
+                            in 7..9 -> Color(0xFF267F00)
+                            else -> Color(0xFF267F00)
+                        }
+                    )
                     .padding(8.dp)
             ) {
                 ShowVariables("Score", score)
@@ -186,7 +212,12 @@ fun GameStateDisplay(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 StandardButton("Increase Score") {
-                    val result = onIncButtonClick(1)
+                    val result = onIncButtonClick((Math.random() * level + 1).toInt())
+                    score = result[MainActivity.SCORE_KEY]!!
+                    level = result[MainActivity.LEVEL_KEY]!!
+                }
+                StandardButton("Decrease Score") {
+                    val result = onDecButtonClick(level * 2)
                     score = result[MainActivity.SCORE_KEY]!!
                     level = result[MainActivity.LEVEL_KEY]!!
                 }
@@ -219,7 +250,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun ShowVariables(
     label: String,
-    value : Int,
+    value: Int,
     modifier: Modifier = Modifier
 ) {
     Text(
