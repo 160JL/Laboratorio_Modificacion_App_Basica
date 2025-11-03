@@ -17,11 +17,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.firstlab.MainActivity.Companion.LEVEL_KEY
 import com.example.firstlab.MainActivity.Companion.SCORE_KEY
@@ -66,7 +64,10 @@ class EndGameActivity : ComponentActivity() {
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(text = "Score: $score", style = MaterialTheme.typography.headlineMedium)
                         Text(text = "Level: $level", style = MaterialTheme.typography.headlineMedium)
-                        Image(painter = painterResource(R.drawable.youwin),"")
+                        when (level){
+                            10 -> Image(painter = painterResource(R.drawable.you_win),"")
+                            else -> Image(painter = painterResource(R.drawable.game_over),"")
+                        }
                         StandardButton("Restart") {
                             // Acción al hacer clic: abrir EndGameActivity
                             goToMainActivity()

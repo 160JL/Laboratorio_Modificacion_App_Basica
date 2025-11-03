@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,9 +43,11 @@ class MainActivity : ComponentActivity() {
         const val TAG = "MainActivity"
         const val SCORE_KEY = "score"
         const val LEVEL_KEY = "level"
+
+        const val USER_KEY = "username"
     }
 
-    private val name: String = "Santos"
+    private var name: String = ""
     private var score: Int = 0
     private var level: Int = 0
 
@@ -79,6 +82,7 @@ class MainActivity : ComponentActivity() {
         savedInstanceState?.let { instance ->
             score = instance.getInt(SCORE_KEY, 0)
             level = instance.getInt(LEVEL_KEY, 0)
+            name = instance.getString(USER_KEY, "")
         }
 
         enableEdgeToEdge()
@@ -149,7 +153,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun GameStateDisplay(
-    name: String,
+    initname: String,
     initScore: Int,
     initLevel: Int,
     modifier: Modifier = Modifier,
@@ -157,6 +161,7 @@ fun GameStateDisplay(
     onDecButtonClick: (Int) -> Map<String, Int>,
     onEndGameButtonClick: () -> Unit
 ) {
+    var name by remember { mutableStateOf(initname) }
     var score by remember { mutableIntStateOf(initScore) }
     var level by remember { mutableIntStateOf(initLevel) }
     Column(
@@ -215,6 +220,7 @@ fun GameStateDisplay(
                     val result = onIncButtonClick((Math.random() * level + 1).toInt())
                     score = result[MainActivity.SCORE_KEY]!!
                     level = result[MainActivity.LEVEL_KEY]!!
+                    if (level>=10) {onEndGameButtonClick()}
                 }
                 StandardButton("Decrease Score") {
                     val result = onDecButtonClick(level * 2)
