@@ -15,4 +15,5 @@
     <string name="dec_button">Decrease Score</string>
     <string name="greeting">Hello </string>
     <string name="encourage">¡Vas por Buen Camino!</string>
+    <string name="tonto">Introduce un nombre de usuario válido!</string>
 </resources>

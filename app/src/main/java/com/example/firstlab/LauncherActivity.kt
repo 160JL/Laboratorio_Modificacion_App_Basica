@@ -55,7 +55,7 @@ class LauncherActivity : ComponentActivity() {
 
     @Composable
     private fun TextField(innerPadding: PaddingValues) {
-        var username by remember { mutableStateOf("") }
+        var username by remember { mutableStateOf("")}; var tonto by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -68,11 +68,13 @@ class LauncherActivity : ComponentActivity() {
                 value = username,
                 onValueChange = { username = it },
             )
+
             StandardButton(stringResource(R.string.play)) {
                 // Acción al hacer clic: abrir EndGameActivity
-                if (!username.isBlank()){goToMainActivity(username)}
+                if (!username.isBlank()){goToMainActivity(username)} else {tonto = true}
 
             }
+            if (tonto) {Text(stringResource(R.string.tonto))}
         }
     }
 }
